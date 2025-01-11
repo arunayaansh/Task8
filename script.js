@@ -1,3 +1,4 @@
+// DOM Creation for Calculator UI
 const app = document.getElementById("app");
 const calculator = document.createElement("div");
 calculator.className = "calculator";
@@ -22,7 +23,15 @@ buttons.forEach((row) => {
   row.forEach((text) => {
     const button = document.createElement("button");
     button.textContent = text;
-    button.className = `btn ${text === "=" ? "btn-custom" : "btn-secondary"} flex-fill mx-1`;
+    button.className = `btn flex-fill mx-1 ${
+      text === "="
+        ? "btn-equal"
+        : text === "C"
+        ? "btn-clear"
+        : isNaN(text) && text !== "." && text !== "00"
+        ? "btn-operator"
+        : "btn-number"
+    }`;
     button.addEventListener("click", () => handleButtonClick(text));
     rowDiv.appendChild(button);
   });
@@ -37,19 +46,15 @@ let memory = 0;
 
 function handleButtonClick(value) {
   if (!isNaN(value) || value === ".") {
-  
     currentInput += value;
     output.textContent = currentInput;
   } else if (value === "C") {
-   
     currentInput = "";
     output.textContent = "0";
   } else if (value === "←") {
-    
     currentInput = currentInput.slice(0, -1);
     output.textContent = currentInput || "0";
   } else if (value === "=") {
-    
     try {
       const result = eval(currentInput.replace("×", "*").replace("/", "/"));
       output.textContent = result;
@@ -58,7 +63,6 @@ function handleButtonClick(value) {
       alert("Invalid Expression");
     }
   } else {
-    
     if (currentInput && !isNaN(currentInput[currentInput.length - 1])) {
       currentInput += value;
       output.textContent = currentInput;
